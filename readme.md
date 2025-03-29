@@ -19,15 +19,13 @@ An AI-powered video proctoring system that analyzes video footage to detect pote
  ┗ 📜 main.py            # Entry point for launching the application    
 
 
-## 🛠️ Installation
-
-1️⃣ Clone the Repository  
-git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git  
-cd Video_Proctoring_Analysis/src
-
+## 🛠️ **Installation**
+1️⃣ Clone the Repository
+    git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git
+    cd Video_Proctoring_Analysis/src
 2️⃣ Install Dependencies
-Make sure you have Python 3.8+ installed. Then, install the required packages:
-pip install -r requirements.txt
+    Make sure you have Python 3.8+ installed. Then, install the required packages:
+    pip install -r requirements.txt
 
 ## 🎯 **Usage**  
 
