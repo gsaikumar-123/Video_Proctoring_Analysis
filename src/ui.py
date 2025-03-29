@@ -6,6 +6,7 @@ from matplotlib.figure import Figure
 import cv2
 from analyzer import VideoAnalyzer
 import os
+from PIL import Image, ImageTk
 
 class EnhancedVideoUI:
     def __init__(self, root):
@@ -15,12 +16,17 @@ class EnhancedVideoUI:
         self.root.configure(bg="#f0f0f0")
         
         self.analyzer = VideoAnalyzer()
+        self.analyzer.ui_callback = self.update_log
         self.setup_ui()
         
         self.update_id = None
+        self.video_image = None
+
+    def update_log(self, log_msg):
+        self.log_text.insert(tk.END, log_msg)
+        self.log_text.see(tk.END)
         
     def setup_ui(self):
-        """Set up the enhanced UI with integrated video and graphs."""
         main_frame = ttk.Frame(self.root)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -32,11 +38,10 @@ class EnhancedVideoUI:
         
         self.analyze_btn = ttk.Button(control_frame, text="Analyze", command=self.analyze_video, state="disabled")
         self.analyze_btn.pack(side=tk.LEFT, padx=5)
-       
+        
         self.pause_btn = ttk.Button(control_frame, text="Pause", command=self.toggle_pause, state="disabled")
         self.pause_btn.pack(side=tk.LEFT, padx=5)
         
-       
         self.stop_btn = ttk.Button(control_frame, text="Stop", command=self.stop_analysis, state="disabled")
         self.stop_btn.pack(side=tk.LEFT, padx=5)
         
@@ -54,7 +59,10 @@ class EnhancedVideoUI:
         
         graphs_frame = ttk.LabelFrame(content_frame, text="Real-time Metrics")
         graphs_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(5, 0))
-        
+
+        self.log_text = tk.Text(graphs_frame, height=10, width=60)
+        self.log_text.pack(fill=tk.BOTH, padx=5, pady=5)
+            
         self.fig = Figure(figsize=(6, 8), dpi=100)
         self.fig.patch.set_facecolor('#f0f0f0')
         
@@ -94,7 +102,6 @@ class EnhancedVideoUI:
         self.fig.tight_layout()
     
     def upload_video(self):
-        """Open file dialog to upload video."""
         file_path = filedialog.askopenfilename(
             title="Select Video File",
             filetypes=[("Video Files", "*.mp4 *.avi *.mov *.mkv"), ("All Files", "*.*")]
@@ -106,7 +113,6 @@ class EnhancedVideoUI:
             self.status_label.config(text="Video loaded. Ready to analyze.")
     
     def analyze_video(self):
-        """Start video analysis in a separate thread."""
         if not self.analyzer.video_path:
             messagebox.showerror("Error", "No video file selected!")
             return
@@ -117,6 +123,7 @@ class EnhancedVideoUI:
         self.analyze_btn.config(state="disabled")
         self.pause_btn.config(state="normal")
         self.stop_btn.config(state="normal")
+        self.log_text.delete(1.0, tk.END)
         
         threading.Thread(
             target=self.analyzer.analyze_video, 
@@ -127,7 +134,6 @@ class EnhancedVideoUI:
         self.start_animation()
     
     def toggle_pause(self):
-        """Pause or resume analysis."""
         if self.analyzer.is_analyzing:
             if self.analyzer.pause_analysis:
                 self.analyzer.pause_analysis = False
@@ -139,7 +145,6 @@ class EnhancedVideoUI:
                 self.status_label.config(text="Analysis paused")
     
     def stop_analysis(self):
-        """Stop the analysis."""
         if self.analyzer.is_analyzing:
             self.analyzer.is_analyzing = False
             self.status_label.config(text="Analysis stopped")
@@ -151,12 +156,11 @@ class EnhancedVideoUI:
                 self.root.after_cancel(self.update_id)
     
     def update_video_frame(self, frame):
-        """Update the video display with the current frame."""
         if frame is not None:
             canvas_width = self.video_canvas.winfo_width()
             canvas_height = self.video_canvas.winfo_height()
             
-            if canvas_width > 1 and canvas_height > 1: 
+            if canvas_width > 1 and canvas_height > 1:
                 frame_height, frame_width = frame.shape[:2]
                 aspect_ratio = frame_width / frame_height
                 
@@ -168,21 +172,19 @@ class EnhancedVideoUI:
                     new_height = int(new_width / aspect_ratio)
                 
                 frame = cv2.resize(frame, (new_width, new_height))
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(frame)
+                self.video_image = ImageTk.PhotoImage(image=img)
                 
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                img = tk.PhotoImage(data=bytes(cv2.imencode('.ppm', frame_rgb)[1].tobytes()))
-                
+                self.video_canvas.delete("all")
                 self.video_canvas.create_image(
                     canvas_width // 2, canvas_height // 2, 
-                    image=img, anchor=tk.CENTER
+                    image=self.video_image, anchor=tk.CENTER
                 )
-                self.video_canvas.image = img
     
     def update_progress(self, progress):
-        """Update progress bar."""
         self.progress_var.set(progress)
         
-        # Update status
         if progress >= 100:
             self.status_label.config(text="Analysis complete")
             self.result_label.config(text=f"Result: {self.analyzer.final_result}")
@@ -191,11 +193,9 @@ class EnhancedVideoUI:
             self.analyze_btn.config(state="normal")
     
     def start_animation(self):
-        """Start the animation loop for updating graphs."""
         self.update_graphs()
     
     def update_graphs(self):
-        """Update the graphs with current data."""
         if not self.analyzer.is_analyzing and len(self.analyzer.time_data) == 0:
             self.update_id = self.root.after(100, self.update_graphs)
             return
