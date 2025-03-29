@@ -13,7 +13,7 @@ An AI-powered video proctoring system that analyzes video footage to detect pote
 
 ## **Project Structure**  
 
-📦 src
+📦 src  
  ┣ 📜 analyzer.py        # Video analysis logic using OpenCV and MediaPipe  
  ┣ 📜 ui.py              # Tkinter-based GUI with real-time graphs  
  ┗ 📜 main.py            # Entry point for launching the application    
