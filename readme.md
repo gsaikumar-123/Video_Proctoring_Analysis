@@ -26,7 +26,7 @@ An AI-powered video proctoring system that analyzes video footage to detect pote
 ## 🛠️ **Installation**  
 
 ### 1. Clone & Setup  
-git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git
+git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git  
 cd Video_Proctoring_Analysis/src
 
 ### 2. Install Dependencies  
@@ -69,6 +69,68 @@ python main.py
 | 0-30%       | ✅ Normal       | No action              |
 | 30-60%      | ⚠️ Suspicious  | Review recommended     |
 | 60-100%     | ❌ High Risk    | Strong cheating evidence|
+
+
+Here are the official download links for the YOLO files you'll need:
+
+## **YOLOv4 Files Download Links**
+
+### **1. yolov4.weights** (Official Pre-trained Weights)
+🔗 [Download from AlexeyAB's Darknet Repository](https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights)  
+*(~245 MB - Official COCO dataset weights)*
+
+### **2. yolov4.cfg** (Configuration File)
+🔗 [Raw GitHub Link](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4.cfg)  
+*(Right-click → "Save As" to download)*
+
+### **3. coco.names** (Class Labels)
+🔗 [Raw GitHub Link](https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names)  
+*(Contains all 80 COCO class names)*
+
+---
+
+## **Alternative Mirrors (if GitHub is slow)**
+
+### **yolov4.weights**
+🔗 [Google Drive Mirror](https://drive.google.com/file/d/1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT/view?usp=sharing)
+
+### **yolov4-tiny.weights** (Lighter/Faster Version)
+🔗 [GitHub Release](https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.weights)  
+*(~23 MB - Lower accuracy but faster processing)*
+
+---
+
+## **📦 Where to Place the Files**
+After downloading, place these files in your `src/` directory:
+```
+src/
+├── yolov4.weights
+├── yolov4.cfg
+└── coco.names
+```
+
+---
+
+## **⚠️ Important Notes**
+1. **Git Ignored**: These files are in `.gitignore` by default (due to large size)
+2. **Alternative Models**: For different YOLO versions:
+   - [YOLOv7](https://github.com/WongKinYiu/yolov7/releases)
+   - [YOLOv5](https://github.com/ultralytics/yolov5/releases)
+3. **Verification**: Ensure MD5 checksums match:
+   ```
+   yolov4.weights: 4f1e8a7f9ecd7845b5e20b03a3a6a8d7
+   yolov4.cfg: d80e0defb9f1a873cc4946a0e9b4113a
+   ```
+
+---
+
+## **🚀 Quick Start with YOLO**
+1. Download all 3 files using the links above
+2. Place them in your project's `src` folder
+3. Set `USE_YOLO=true` in `.env` file
+4. Run `python main.py`
+
+> 💡 *For first-time runs, YOLO may take 10-20 seconds to initialize the model.*
 
 
 ## 🔧 **Customization**  
