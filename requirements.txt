@@ -1,0 +1,6 @@
+mediapipe==0.10.14
+opencv-python==4.5.5.64
+sounddevice==0.4.6
+virtualenv==20.24.1
+numpy 
+protobuf
