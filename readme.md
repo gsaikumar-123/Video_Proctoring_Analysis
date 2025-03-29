@@ -48,8 +48,7 @@ python main.py
 - **Head movement**: Sudden or excessive turning suggests distraction.  
 - **Mouth movement**: Frequent talking could indicate communication.  
 
-The probability formula:  
-cheating_score = (0.4 * eye_tracking) + (0.4 * head_movement) + (0.2 * mouth_movement)
+The probability  
 
 - **Low Risk (0-30%)** ✅ – No suspicious behavior.  
 - **Moderate Risk (30-60%)** ⚠️ – Some unusual activity.  
