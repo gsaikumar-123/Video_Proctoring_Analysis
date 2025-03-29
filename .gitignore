@@ -1,0 +1,4 @@
+src/coco.names
+src/yolov4.cfg
+src/yolov4.weights
+src/.env

@@ -5,6 +5,9 @@ from tkinter import messagebox
 import time
 import cv2.dnn
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 mp_face_mesh = mp.solutions.face_mesh.FaceMesh(
     min_detection_confidence=0.5,
@@ -29,7 +32,8 @@ class VideoAnalyzer:
         
         self.net = None
         self.classes = []
-        self.init_yolo()
+        if os.getenv('USE_YOLO', 'false').lower() == 'true':
+            self.init_yolo()
         
         self.baseline_eye = None
         self.baseline_head = None
@@ -43,28 +47,25 @@ class VideoAnalyzer:
         self.ui_callback = None
 
     def init_yolo(self):
-        """Initialize YOLO object detection"""
+        """Initialize YOLO using paths from .env"""
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            weights_path = os.path.join(script_dir, "yolov4.weights")
-            cfg_path = os.path.join(script_dir, "yolov4.cfg")
-            names_path = os.path.join(script_dir, "coco.names")
-            
-            if not all(os.path.exists(path) for path in [weights_path, cfg_path, names_path]):
-                print("One or more YOLO files missing")
-                return
-                
-            self.net = cv2.dnn.readNet(weights_path, cfg_path)
+            weights_path = os.getenv('YOLO_WEIGHTS_PATH', 'yolov4.weights')
+            cfg_path = os.getenv('YOLO_CONFIG_PATH', 'yolov4.cfg')
+            names_path = os.getenv('YOLO_NAMES_PATH', 'coco.names')
 
+            if not all(os.path.exists(p) for p in [weights_path, cfg_path, names_path]):
+                print("YOLO files missing, object detection disabled")
+                return
+
+            self.net = cv2.dnn.readNet(weights_path, cfg_path)
+            
             with open(names_path, "r") as f:
                 self.classes = [line.strip() for line in f.readlines()]
                 
             print("YOLO initialized successfully")
-            
         except Exception as e:
             print(f"YOLO initialization failed: {str(e)}")
             self.net = None
-            self.classes = []
 
     def calibrate(self, face_landmarks, shape):
         self.baseline_eye = self.get_eye_tracking(face_landmarks, shape)
