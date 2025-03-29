@@ -2,6 +2,7 @@
 
 An AI-powered video proctoring system that analyzes video footage to detect potential cheating behavior during an exam. The system uses **MediaPipe** for facial landmark detection and **YOLOv4** for object detection, tracking **eye movement, head movement, mouth activity, and prohibited objects** to determine cheating probability.
 
+---
 
 ## **Features**  
 ✅ **Video Upload & Processing**: Upload and analyze exam recordings  
@@ -11,6 +12,7 @@ An AI-powered video proctoring system that analyzes video footage to detect pote
 ✅ **Interactive Dashboard**: Live graphs + event logging  
 ✅ **Pause/Resume Controls**: Flexible analysis management  
 
+---
 
 ## **Project Structure**  
 
@@ -22,21 +24,29 @@ An AI-powered video proctoring system that analyzes video footage to detect pote
  ┣ 📜 yolov4.weights     # YOLO pretrained weights  
  ┗ 📜 coco.names         # Object class labels  
 
+---
 
 ## 🛠️ **Installation**  
 
 ### 1. Clone & Setup  
-git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git  
+```bash
+git clone https://github.com/gsaikumar-123/Video_Proctoring_Analysis.git
 cd Video_Proctoring_Analysis/src
+```
 
 ### 2. Install Dependencies  
+```bash
 pip install -r requirements.txt
+```
 
 > **Note**: YOLO requires OpenCV with DNN support. For GPU acceleration, install `opencv-python-headless` and CUDA-enabled OpenCV.
 
+---
 
 ## 🎯 **Usage**  
+```bash
 python main.py
+```
 
 ### **Workflow**  
 1. **Upload** exam video (MP4/AVI/MOV)  
@@ -46,6 +56,8 @@ python main.py
 3. **Review**:  
    - Cheating probability graph  
    - Flagged events timeline  
+
+---
 
 ## ⚙️ **Detection System**  
 
@@ -58,10 +70,11 @@ python main.py
 
 ### **2. Object Detection (YOLOv4)**  
 🚫 **Flagged Items**:  
-- Cell phones    
+- Cell phones  
+- Books/notes  
 - Secondary devices  
 
-**Impact**: Immediate +90% probability boost when detected  
+**Impact**: Immediate +50% probability boost when detected  
 
 ### **Risk Levels**  
 | Probability | Status          | Response               |
@@ -70,6 +83,7 @@ python main.py
 | 30-60%      | ⚠️ Suspicious  | Review recommended     |
 | 60-100%     | ❌ High Risk    | Strong cheating evidence|
 
+---  
 
 Here are the official download links for the YOLO files you'll need:
 
@@ -115,13 +129,7 @@ src/
 1. **Git Ignored**: These files are in `.gitignore` by default (due to large size)
 2. **Alternative Models**: For different YOLO versions:
    - [YOLOv7](https://github.com/WongKinYiu/yolov7/releases)
-   - [YOLOv5](https://github.com/ultralytics/yolov5/releases)
-3. **Verification**: Ensure MD5 checksums match:
-   ```
-   yolov4.weights: 4f1e8a7f9ecd7845b5e20b03a3a6a8d7
-   yolov4.cfg: d80e0defb9f1a873cc4946a0e9b4113a
-   ```
-
+   - [YOLOv5](https://github.com/ultralytics/yolov5/releases)  
 ---
 
 ## **🚀 Quick Start with YOLO**
@@ -132,13 +140,14 @@ src/
 
 > 💡 *For first-time runs, YOLO may take 10-20 seconds to initialize the model.*
 
-
 ## 🔧 **Customization**  
 
 ### **YOLO Configuration**  
 1. **To disable object detection**:  
    Create `.env` file with:  
+   ```ini
    USE_YOLO=false
+   ```
 
 2. **Custom object classes**:  
    Modify `coco.names` to focus on specific items.  
@@ -152,15 +161,19 @@ src/
 | `FRAME_SKIP`       | analyzer.py    | Higher = faster but less precise |
 | Detection threshold| analyzer.py    | Adjust `confidence > 0.5` for sensitivity |
 
+---
 
 ## 📌 **Notes**  
 - YOLO files (`*.weights`, `*.cfg`) are **git-ignored** by default. Download them separately or use the `.env` config.  
 - For **GPU acceleration**, install CUDA/cuDNN and compile OpenCV with DNN support.  
 
+--- 
 
 🚀 **Next Steps**:  
 - Add multi-person support  
 - Integrate audio analysis for voice detection  
 - Export detailed PDF reports  
+
+--- 
 
 📄 *See `requirements.txt` for full dependency list*
